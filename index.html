@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD"
+      crossorigin="anonymous"
+    />
+  </head>
+
+  <body>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-12 mx-auto">
+          <div id="msgHistry" class="border-bottom"></div>
+        </div>
+        <div class="input-group mb-3">
+          <input
+            id="message"
+            type="text"
+            class="form-control"
+            placeholder="Recipient's username"
+            aria-label="Recipient's username"
+            aria-describedby="button-addon2"
+          />
+          <button
+            onclick="sendMessage()"
+            class="btn btn-primary"
+            type="button"
+            id="button-addon2"
+          >
+            Send
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- <h1 id="alu"></h1> -->
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      let socket = io();
+
+      const sendMessage = () => {
+        const messageText = document.getElementById("message").value;
+        socket.emit("chat", messageText);
+        document.getElementById("message").value = "";
+        alert(messageText);
+      };
+
+      function playSound() {
+        const audio = new Audio(
+          "https://cdn.pixabay.com/download/audio/2021/08/04/audio_0625c1539c.mp3?filename=success-1-6297.mp3%27"
+        );
+        audio.play();
+      }
+
+      socket.on("chat-transfer", (msg) => {
+        const p = document.createElement("p");
+        p.classList = "border-bottom p-2";
+        p.innerText = msg;
+        playSound();
+
+        const msgHistry = document.getElementById("msgHistry");
+        msgHistry.appendChild(p);
+      });
+
+      socket.on("alu", function (data) {
+        document.getElementById("alu").innerHTML = data;
+      });
+    </script>
+  </body>
+</html>
