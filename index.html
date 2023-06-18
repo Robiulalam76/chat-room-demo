@@ -50,7 +50,6 @@
         const messageText = document.getElementById("message").value;
         socket.emit("chat", messageText);
         document.getElementById("message").value = "";
-        alert(messageText);
       };
 
       function playSound() {
